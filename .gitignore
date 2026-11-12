@@ -1,20 +1,38 @@
-.DS_Store
-.idea
-.vscode
-dist
-node_modules
-.env
-*.log
-*.bak
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+.eslintcache
+
+# Mendix test app
+#
+# config.projectPath in package.json points at test/<WidgetName>TestApp, and `npm run build`
+# copies the built .mpk into its widgets folder. The app's model is worth committing; what
+# Studio Pro and the runtime generate around it is not.
+test/*/deployment/
+test/*/widgets/
+test/*/.mendix-cache/
+test/*/theme-cache/
+test/*/javascriptsource/*/node_modules/
+test/*/userlib/
+test/*/*.mpr.lock
 *.launch
 mxproject
-coverage
 
-**/results
-mendixProject
-**/e2e/diffs
-**/screenshot
-**/screenshot-results
-**/tests/testProject
-**/artifacts
+# Local settings - these hold absolute paths and per-developer choices
 **/project-settings.user.json
+.env
+.env.local
+
+# Logs and scratch files
+*.log
+npm-debug.log*
+*.bak
+*.swp
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+._.DS_Store
+Thumbs.db
