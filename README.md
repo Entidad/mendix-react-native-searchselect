@@ -108,6 +108,58 @@ a few hundred rows rather than an open-ended table.
 The open list covers the status bar and pads its header by a measured inset on Android and an
 estimated one on iOS. Set `paddingTop` on `header` to override it.
 
+### Overriding the default styling
+Mendix uses a theme export named after the widget id, with the dots turned into underscores,
+as a widget's default style — the one every instance gets with no class set on the page. Atlas
+does this for its own widgets: `com_mendix_widget_native_badge_Badge` styles the Badge. For
+this widget the name is
+
+```
+entidad_io_native_nativesearchselect_NativeSearchSelect
+```
+
+Export it from a theme file the app loads — `theme/native/main.js`, or a module's
+`themesource/<module>/native/main.js` — and every instance picks it up:
+
+```js
+import { brand, font, input, spacing } from "../../../theme/native/custom-variables";
+
+export const entidad_io_native_nativesearchselect_NativeSearchSelect = {
+    //  The closed field, shaped like Atlas's own DropDown.valueContainer.
+    container: {
+        borderWidth: input.input.borderWidth,
+        borderRadius: input.input.borderRadius,
+        borderColor: input.input.borderColor,
+        backgroundColor: input.input.backgroundColor,
+        paddingHorizontal: input.input.paddingHorizontal,
+        minHeight: input.input.minHeight
+    },
+    optionSelected: {
+        backgroundColor: brand.actionLight
+    },
+    optionTextSelected: {
+        color: brand.primary
+    },
+    selectedIcon: {
+        color: brand.primary,
+        fontSize: font.sizeH2,
+        marginLeft: spacing.small
+    }
+};
+```
+
+Reading the values from the app's own `input` and `font` variables — the ones Atlas builds its
+Text Box and Drop Down from — is what makes the widget match the stock ones, and keeps it
+matching when a token changes.
+
+Styles merge key by key, so a class only needs to name what it changes and every key it leaves
+out keeps the widget's own default. That cuts both ways: a default the class does not mention
+survives, so to drop one, override it rather than omit it — `marginLeft: 0` on `separator`,
+not silence.
+
+A variant for a single page goes in the same file under any other name and is set on the
+widget's **Class** property, which applies over the default rather than replacing it.
+
 ## Development notes
 Pluggable Widgets Tools 11.12.1 declares `engines.node` as `^22.18.0` and refuses to run at
 all on Node 24. `scripts/relax-tools-node-range.js` widens that ceiling after every install;
