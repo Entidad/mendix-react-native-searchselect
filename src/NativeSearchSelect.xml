@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="entidad.io.native.nativesearchselect.NativeSearchSelect" pluginWidget="true" needsEntityContext="true" offlineCapable="true"
+		supportedPlatform="Native"
+		xmlns="http://www.mendix.com/widget/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
+	<name>Native Search Select</name>
+	<description>Select with a searchable option list, over an enumeration or a list of objects</description>
+	<properties>
+		<propertyGroup caption="General">
+			<property key="optionsSource" type="enumeration" required="true" defaultValue="enumeration">
+				<caption>Options from</caption>
+				<description>Where the options come from. Enumeration reads them from the bound attribute itself, so nothing else needs modelling. Objects reads them from a data source and writes the chosen object to an association.</description>
+				<enumerationValues>
+					<enumerationValue key="enumeration">Enumeration</enumerationValue>
+					<enumerationValue key="datasource">Objects</enumerationValue>
+				</enumerationValues>
+			</property>
+			<property key="enumAttribute" type="attribute" required="false">
+				<caption>Value</caption>
+				<description>Enumeration attribute holding the selection. The options and their captions come from the enumeration itself, in the language of the session. Required when Options from is Enumeration.</description>
+				<attributeTypes>
+					<attributeType name="Enum"/>
+				</attributeTypes>
+			</property>
+			<property key="objects" type="datasource" isList="true" required="false">
+				<caption>Options</caption>
+				<description>List of objects to choose from. Required when Options from is Objects. The whole list is retrieved and searched on the device, so keep it to a size that is reasonable to hold in memory.</description>
+			</property>
+			<property key="selection" type="association" required="false" selectableObjects="objects">
+				<caption>Selected</caption>
+				<description>Association the chosen object is written to. Required when Options from is Objects.</description>
+				<associationTypes>
+					<associationType name="Reference"/>
+				</associationTypes>
+			</property>
+			<property key="optionCaption" type="textTemplate" required="false" multiline="false" dataSource="objects">
+				<caption>Option caption</caption>
+				<description>Text shown for each object, in the list and in the closed field. Ignored when Options from is Enumeration.</description>
+			</property>
+			<property key="optionSubtitle" type="textTemplate" required="false" multiline="false" dataSource="objects">
+				<caption>Option subtitle</caption>
+				<description>Optional second line under each option, for a code, a location or any other detail that tells two similar captions apart. It is searched along with the caption. Ignored when Options from is Enumeration.</description>
+			</property>
+			<property key="optionSearchText" type="textTemplate" required="false" multiline="false" dataSource="objects">
+				<caption>Extra search text</caption>
+				<description>Further text matched against the search query but never shown, such as a synonym or an abbreviation. Ignored when Options from is Enumeration.</description>
+			</property>
+		</propertyGroup>
+		<propertyGroup caption="Editability">
+			<systemProperty key="Editability"/>
+		</propertyGroup>
+		<propertyGroup caption="Field">
+			<property key="placeholder" type="textTemplate" required="false" multiline="false">
+				<caption>Placeholder</caption>
+				<description>Shown in the closed field while nothing is selected</description>
+			</property>
+			<property key="dropdownIcon" type="icon" required="false">
+				<caption>Dropdown icon</caption>
+				<description>Trailing icon on the closed field. Left unset, the widget draws the same chevron the platform's own Drop-down does.</description>
+			</property>
+			<property key="allowClear" type="boolean" required="true" defaultValue="false">
+				<caption>Allow clear</caption>
+				<description>Add a row at the top of the list that empties the selection. Leave off for a required value.</description>
+			</property>
+			<property key="clearCaption" type="textTemplate" required="false" multiline="false">
+				<caption>Clear caption</caption>
+				<description>Caption of the clearing row. Falls back to the placeholder. Requires Allow clear.</description>
+			</property>
+		</propertyGroup>
+		<propertyGroup caption="Search">
+			<property key="searchPlaceholder" type="textTemplate" required="false" multiline="false">
+				<caption>Search placeholder</caption>
+				<description>Hint shown in the empty search box</description>
+			</property>
+			<property key="minOptionsForSearch" type="integer" required="true" defaultValue="0">
+				<caption>Minimum options for search</caption>
+				<description>Hide the search box until there are at least this many options, so a short list opens straight to its choices. 0 always shows it.</description>
+			</property>
+			<property key="matchMode" type="enumeration" required="true" defaultValue="contains">
+				<caption>Match</caption>
+				<description>How a typed query is matched. Accents and letter case are ignored in every mode, so a query of "plantacion" finds "Plantación".</description>
+				<enumerationValues>
+					<enumerationValue key="contains">Anywhere in the text</enumerationValue>
+					<enumerationValue key="startsWith">Start of a word</enumerationValue>
+					<enumerationValue key="allWords">All words, in any order</enumerationValue>
+				</enumerationValues>
+			</property>
+			<property key="autoFocusSearch" type="boolean" required="true" defaultValue="true">
+				<caption>Focus search on open</caption>
+				<description>Raise the keyboard as soon as the list opens. Turn off to show the full list first.</description>
+			</property>
+			<property key="searchIcon" type="icon" required="false">
+				<caption>Search icon</caption>
+				<description>Leading icon inside the search box. Left unset, a magnifier from the app's icon font is drawn.</description>
+			</property>
+		</propertyGroup>
+		<propertyGroup caption="List">
+			<property key="modalTitle" type="textTemplate" required="false" multiline="false">
+				<caption>Title</caption>
+				<description>Heading above the search box</description>
+			</property>
+			<property key="emptyCaption" type="textTemplate" required="false" multiline="false">
+				<caption>No results caption</caption>
+				<description>Shown in place of the list when nothing matches the query</description>
+			</property>
+			<property key="closeIcon" type="icon" required="false">
+				<caption>Close icon</caption>
+				<description>Icon that closes the list without choosing. Left unset, a cross from the app's icon font is drawn.</description>
+			</property>
+			<property key="selectedIcon" type="icon" required="false">
+				<caption>Selected icon</caption>
+				<description>Icon marking the option currently selected. Left unset, a check mark from the app's icon font is drawn.</description>
+			</property>
+		</propertyGroup>
+		<propertyGroup caption="Events">
+			<property key="onOpenAction" type="action" required="false">
+				<caption>On open</caption>
+				<description>Runs when the list opens, before anything is chosen. Use it to refresh the options.</description>
+			</property>
+			<property key="onChangeAction" type="action" required="false">
+				<caption>On change</caption>
+				<description>Runs after a new selection has been written, and after the selection is cleared</description>
+			</property>
+			<property key="onCloseAction" type="action" required="false">
+				<caption>On close</caption>
+				<description>Runs when the list closes, whether or not anything was chosen</description>
+			</property>
+		</propertyGroup>
+	</properties>
+</widget>

@@ -1,0 +1,41 @@
+{
+  "name": "searchselect",
+  "widgetName": "NativeSearchSelect",
+  "version": "1.0.0",
+  "description": "Native select with a searchable option list, over an enumeration or a list of objects",
+  "copyright": "© 2026 Entidad. All Rights Reserved.",
+  "author": "Jorge Flores",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "license": "Apache-2.0",
+  "config": {
+    "projectPath": "./test/NativeSearchSelectTestApp"
+  },
+  "packagePath": "entidad.io.native",
+  "scripts": {
+    "postinstall": "node scripts/relax-tools-node-range.js",
+    "start": "pluggable-widgets-tools start:native",
+    "build": "pluggable-widgets-tools build:native",
+    "lint": "pluggable-widgets-tools lint",
+    "lint:fix": "pluggable-widgets-tools lint:fix",
+    "prerelease": "npm run lint",
+    "release": "pluggable-widgets-tools release:native"
+  },
+  "bugs": {
+    "url": "https://github.com/Entidad/mendix-react-native-searchselect/issues"
+  },
+  "devDependencies": {
+    "@mendix/pluggable-widgets-tools": "11.12.1"
+  },
+  "resolutions": {
+    "react": "^19.2.0",
+    "@types/react": "^19.0.0",
+    "react-native": "0.84.1"
+  },
+  "overrides": {
+    "react": "^19.2.0",
+    "@types/react": "^19.0.0",
+    "react-native": "0.84.1"
+  }
+}
