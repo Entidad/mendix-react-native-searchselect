@@ -14,7 +14,10 @@ data source and the choice is written to an association.
 * Binds an enumeration attribute, or a data source plus a reference association
 * Captions come from the enumeration's own translations, in the session's language
 * Search ignores accents and letter case, so `plantacion` finds **Plantación**
+* Emoji and punctuation are ignored when searching and sorting, so a caption written as
+  🍀Weeding still sorts under W and is still found by typing `weeding`
 * Three match modes: anywhere in the text, start of a word, or all words in any order
+* Options shown as modelled, or ordered by caption, ignoring accents and letter case
 * Objects can carry a subtitle line and hidden extra search text, both searchable
 * The search box can be hidden until the list is long enough to need it
 * Optional clearing row for an attribute that is allowed to be empty
@@ -78,6 +81,7 @@ a few hundred rows rather than an open-ended table.
 | `matchMode` | `contains`, `startsWith` (start of any word) or `allWords` |
 | `autoFocusSearch` | Raise the keyboard as soon as the list opens |
 | `searchIcon` | Leading icon inside the search box; a magnifier is drawn when unset |
+| `sortOrder` | `model` (as modelled / the data source's own order), `captionAsc` or `captionDesc` |
 | `modalTitle` | Heading above the search box |
 | `emptyCaption` | Shown in place of the list when nothing matches |
 | `closeIcon` | Icon that closes the list; a cross is drawn when unset |

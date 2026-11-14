@@ -1,6 +1,17 @@
 import{Component}from"react";
 import{NativeSearchSelectComponent}from"./components/NativeSearchSelectComponent";
-import{haystack}from"./utils/match";
+import{fold,haystack}from"./utils/match";
+//Captions are compared folded - accents stripped, case dropped - so "Ópalo" sorts under O
+//rather than after Z, and "ópalo" never lands apart from "Ópalo". The raw captions break a
+//tie, so two options that fold alike keep a settled order instead of one the sort decides.
+//Deliberately not localeCompare: without Intl it falls back to code points, which would put
+//Ñ after Z on one engine and not on another, and an order that moves between devices is
+//worse than one that is merely approximate.
+function byCaption(a,b){
+	if(a.sort!==b.sort)return a.sort<b.sort?-1:1;
+	if(a.caption!==b.caption)return a.caption<b.caption?-1:1;
+	return 0;
+}
 export class NativeSearchSelect extends Component{
 	constructor(props){
 		super(props);
@@ -39,7 +50,7 @@ export class NativeSearchSelect extends Component{
 		const formatter=attr.formatter;
 		return attr.universe.map(key=>{
 			const caption=formatter!=null&&typeof formatter.format=="function"?formatter.format(key):String(key);
-			return{id:key,caption:caption,subtitle:undefined,item:undefined,search:haystack([caption])};
+			return{id:key,caption:caption,subtitle:undefined,item:undefined,search:haystack([caption]),sort:fold(caption)};
 		});
 	}
 	objectOptions(){
@@ -57,11 +68,24 @@ export class NativeSearchSelect extends Component{
 				subtitle:subtitle,
 				item:item,
 				search:haystack([caption,subtitle,extra]),
+				sort:fold(caption),
 			};
 		});
 	}
 	options(){
-		return this.isEnumMode()?this.enumOptions():this.objectOptions();
+		return this.sorted(this.isEnumMode()?this.enumOptions():this.objectOptions());
+	}
+	//Sorted here rather than in the list, so it happens once per set of props instead of once
+	//per keystroke: filtering a sorted list keeps it sorted.
+	sorted(options){
+		const order=this.props.sortOrder;
+		//"As modelled" is the enumeration's own order, or whatever the data source returns -
+		//which is where to sort objects on something that is not their caption.
+		if(order!="captionAsc"&&order!="captionDesc")return options;
+		const direction=order=="captionAsc"?1:-1;
+		//Sorting a copy. The array is freshly built above, so sorting it in place would be
+		//safe today, and would quietly stop being safe the day it is ever cached or shared.
+		return options.slice().sort((a,b)=>direction*byCaption(a,b));
 	}
 	//What the closed field shows. In enumeration mode the platform has already formatted the
 	//value, so displayValue is used rather than looking the caption up again.

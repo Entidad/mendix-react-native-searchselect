@@ -95,6 +95,15 @@
 			</property>
 		</propertyGroup>
 		<propertyGroup caption="List">
+			<property key="sortOrder" type="enumeration" required="true" defaultValue="model">
+				<caption>Order</caption>
+				<description>How the options are ordered. As modelled keeps an enumeration's own order, or a data source's sort order, which is where to sort objects on something other than their caption. The two caption orders ignore accents and letter case, so Ópalo sorts under O and not after Z.</description>
+				<enumerationValues>
+					<enumerationValue key="model">As modelled</enumerationValue>
+					<enumerationValue key="captionAsc">Caption, A to Z</enumerationValue>
+					<enumerationValue key="captionDesc">Caption, Z to A</enumerationValue>
+				</enumerationValues>
+			</property>
 			<property key="modalTitle" type="textTemplate" required="false" multiline="false">
 				<caption>Title</caption>
 				<description>Heading above the search box</description>
